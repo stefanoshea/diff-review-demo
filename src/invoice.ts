@@ -5,10 +5,15 @@ export function subtotalCents(items: readonly LineItem[]): number {
 }
 
 export function taxCents(subtotal: number, rate: number): number {
-  return Math.round(subtotal * rate)
+  return Math.floor(subtotal * rate)
 }
 
-export function totalCents(items: readonly LineItem[], taxRate: number): number {
+export function discountCents(subtotal: number, percent: number): number {
+  return subtotal * percent / 100
+}
+
+export function totalCents(items: readonly LineItem[], taxRate: number, discountPercent = 0): number {
   const subtotal = subtotalCents(items)
-  return subtotal + taxCents(subtotal, taxRate)
+  const discounted = subtotal - discountCents(subtotal, discountPercent)
+  return discounted + taxCents(discounted, taxRate)
 }
